@@ -12,13 +12,17 @@
     </ul>
 </nav>
 <div class="menuItems form large-9 medium-8 columns content">
-    <?= $this->Form->create($menuItem) ?>
+    <?= $this->Form->create($menuItem, ['type' => 'file']) ?>
     <fieldset>
         <legend><?= __('Add Menu Item') ?></legend>
         <?php
             echo $this->Form->control('name');
             echo $this->Form->control('price');
-            echo $this->Form->control('category_id', ['options' => $categories]);
+            echo $this->Form->control('image', ['type' => 'file']);
+            echo $this->Form->control('category_id', [
+                'options' => $categories,
+                'templates' => ['inputContainer' => '<div class="input {{type}} required">{{content}}</div>']
+            ]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

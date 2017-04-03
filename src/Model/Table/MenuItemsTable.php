@@ -63,6 +63,11 @@ class MenuItemsTable extends Table
             ->requirePresence('price', 'create')
             ->notEmpty('price');
 
+        $validator
+            ->uploadedFile('image', [])
+            ->requirePresence('image', 'create')
+            ->notEmpty('image');
+
         return $validator;
     }
 

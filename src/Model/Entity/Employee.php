@@ -32,4 +32,13 @@ class Employee extends Entity
         '*' => true,
         'id' => false
     ];
+
+    /**
+     * Fields that are excluded from JSON versions of the entity.
+     *
+     * @var array
+     */
+    protected $_hidden = [
+        'password_hash'
+    ];
 }

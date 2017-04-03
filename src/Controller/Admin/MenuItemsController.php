@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 
@@ -54,10 +54,16 @@ class MenuItemsController extends AppController
         $menuItem = $this->MenuItems->newEntity();
         if ($this->request->is('post')) {
             $menuItem = $this->MenuItems->patchEntity($menuItem, $this->request->getData());
-            if ($this->MenuItems->save($menuItem)) {
-                $this->Flash->success(__('The menu item has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+            if (!$menuItem->errors()) {
+                $filename = $this->request->getData()['image']['tmp_name'];
+                $destination = 'uploads'.DS.$this->request->getData()['image']['name'];
+                if (move_uploaded_file($filename, $destination)) {
+                    $menuItem['image'] = $this->request->getData()['image']['name'];
+                    if ($this->MenuItems->save($menuItem)) {
+                        $this->Flash->success(__('The menu item has been saved.'));
+                        return $this->redirect(['action' => 'index']);
+                    }
+                }
             }
             $this->Flash->error(__('The menu item could not be saved. Please, try again.'));
         }

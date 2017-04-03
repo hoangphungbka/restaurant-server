@@ -17,11 +17,11 @@
         <legend><?= __('Add Employee') ?></legend>
         <?php
             echo $this->Form->control('username');
-            echo $this->Form->control('password_hash');
+            echo $this->Form->control('password_hash', ['label' => 'Password', 'type' => 'password']);
             echo $this->Form->control('email');
             echo $this->Form->control('phone');
             echo $this->Form->control('address');
-            echo $this->Form->control('status');
+            echo $this->Form->control('status', ['label' => 'Role', 'type' => 'select', 'options' => $roles]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

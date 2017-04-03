@@ -5,6 +5,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Auth\DefaultPasswordHasher;
 
 /**
  * Employees Model
@@ -58,6 +59,7 @@ class EmployeesTable extends Table
             ->notEmpty('username');
 
         $validator
+            ->minLength('password_hash', 6, 'You must enter at least 6 characters!')
             ->requirePresence('password_hash', 'create')
             ->notEmpty('password_hash');
 
@@ -93,7 +95,17 @@ class EmployeesTable extends Table
     {
         $rules->add($rules->isUnique(['username']));
         $rules->add($rules->isUnique(['email']));
+        $rules->add($rules->isUnique(['phone']));
 
         return $rules;
+    }
+
+    public function identify($username, $password, $status)
+    {
+        $employee = $this->find()->where(['username' => $username, 'status' => $status])->first();
+        if ($employee && (new DefaultPasswordHasher)->check($password, $employee['password_hash'])) {
+            return $employee;
+        }
+        return null;
     }
 }

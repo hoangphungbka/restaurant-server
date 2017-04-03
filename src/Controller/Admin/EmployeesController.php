@@ -1,7 +1,8 @@
 <?php
-namespace App\Controller;
 
+namespace App\Controller\Admin;
 use App\Controller\AppController;
+use Cake\Auth\DefaultPasswordHasher;
 
 /**
  * Employees Controller
@@ -10,6 +11,9 @@ use App\Controller\AppController;
  */
 class EmployeesController extends AppController
 {
+    public $roles = [
+        1 => 'Waiter', 2 => 'Chef', 3 => 'Cashier'
+    ];
 
     /**
      * Index method
@@ -51,13 +55,17 @@ class EmployeesController extends AppController
         $employee = $this->Employees->newEntity();
         if ($this->request->is('post')) {
             $employee = $this->Employees->patchEntity($employee, $this->request->getData());
-            if ($this->Employees->save($employee)) {
-                $this->Flash->success(__('The employee has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+            if (!$employee->errors()) {
+                $password = $this->request->getData()['password_hash'];
+                $employee['password_hash'] = (new DefaultPasswordHasher)->hash($password);
+                if ($this->Employees->save($employee)) {
+                    $this->Flash->success(__('The employee has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                }
             }
             $this->Flash->error(__('The employee could not be saved. Please, try again.'));
         }
+        $this->set('roles', $this->roles);
         $this->set(compact('employee'));
         $this->set('_serialize', ['employee']);
     }
