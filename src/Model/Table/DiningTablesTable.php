@@ -52,6 +52,11 @@ class DiningTablesTable extends Table
             ->requirePresence('chairs_count', 'create')
             ->notEmpty('chairs_count');
 
+        $validator
+            ->integer('status')
+            ->requirePresence('status', 'create')
+            ->notEmpty('status');
+
         return $validator;
     }
 }

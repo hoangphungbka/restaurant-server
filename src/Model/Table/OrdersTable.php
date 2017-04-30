@@ -73,9 +73,19 @@ class OrdersTable extends Table
             ->notEmpty('updated_at');
 
         $validator
+            ->integer('total_amount')
+            ->requirePresence('total_amount', 'create')
+            ->notEmpty('total_amount');
+
+        $validator
             ->integer('table_number')
             ->requirePresence('table_number', 'create')
             ->notEmpty('table_number');
+
+        $validator
+            ->integer('status')
+            ->requirePresence('status', 'create')
+            ->notEmpty('status');
 
         return $validator;
     }

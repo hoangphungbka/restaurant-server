@@ -69,6 +69,11 @@ class OrderDetailsTable extends Table
             ->requirePresence('amount', 'create')
             ->notEmpty('amount');
 
+        $validator
+            ->integer('status')
+            ->requirePresence('status', 'create')
+            ->notEmpty('status');
+
         return $validator;
     }
 
