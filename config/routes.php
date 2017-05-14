@@ -45,18 +45,19 @@ Router::defaultRouteClass(DashedRoute::class);
 
 Router::prefix('admin', function (RouteBuilder $routes) {
     $routes->connect('/:controller/:action/*', ['prefix' => 'admin']);
-    $routes->connect('/:controller/*', ['prefix' => 'admin', 'action'=>'index']);
+    $routes->connect('/:controller/*', ['prefix' => 'admin', 'action' => 'index']);
 });
 
 Router::prefix('cashier', function (RouteBuilder $routes) {
     $routes->connect('/:controller/:action/*', ['prefix' => 'cashier']);
-    $routes->connect('/:controller/*', ['prefix' => 'cashier', 'action'=>'index']);
+    $routes->connect('/:controller/*', ['prefix' => 'cashier', 'action' => 'index']);
+    $routes->connect('/*', ['prefix' => 'cashier', 'controller' => 'pages', 'action' => 'index']);
 });
 
 Router::prefix('api', function (RouteBuilder $routes) {
     $routes->extensions(['json']);
     $routes->connect('/:controller/:action/*', ['prefix' => 'api']);
-    $routes->connect('/:controller/*', ['prefix' => 'api', 'action'=>'index']);
+    $routes->connect('/:controller/*', ['prefix' => 'api', 'action' => 'index']);
 });
 
 Router::scope('/', function (RouteBuilder $routes) {

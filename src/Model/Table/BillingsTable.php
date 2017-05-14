@@ -60,11 +60,6 @@ class BillingsTable extends Table
             ->notEmpty('total_amount');
 
         $validator
-            ->integer('discount')
-            ->requirePresence('discount', 'create')
-            ->notEmpty('discount');
-
-        $validator
             ->dateTime('created_at')
             ->requirePresence('created_at', 'create')
             ->notEmpty('created_at');

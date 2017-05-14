@@ -1,0 +1,15 @@
+{
+  "name": "restaurant_node",
+  "version": "1.0.0",
+  "description": "Nothing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "HOANG PHUNG",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2",
+    "socket.io": "^1.7.3"
+  }
+}

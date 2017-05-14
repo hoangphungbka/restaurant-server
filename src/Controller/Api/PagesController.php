@@ -108,4 +108,65 @@ class PagesController extends AppController
         }
         $this->set(['result' => $result, '_serialize' => ['result']]);
     }
+
+    public function loadDetailsByOrder($orderId)
+    {
+        $orderDetails = $this->OrderDetails->find('all', [
+            'fields' => ['id', 'quantity', 'status', 'amount', 'item_id'],
+            'conditions' => ['order_id' => $orderId],
+        ])->toArray();
+        foreach ($orderDetails as $key => $orderDetail) {
+            $menuItem = $this->MenuItems->get($orderDetail['item_id']);
+            $orderDetails[$key]['item_price'] = $menuItem['price'];
+            $orderDetails[$key]['item_name'] = $menuItem['name'];
+        }
+        $this->set(['orderDetails' => $orderDetails, '_serialize' => ['orderDetails']]);
+    }
+
+    public function sendProcessingRequest($orderDetailId)
+    {
+        $result = static::FAILURE_MESSAGE;
+        $orderDetail = $this->OrderDetails->get($orderDetailId);
+        $orderDetail['status'] = static::PROCESSING_ITEM;
+        if ($this->OrderDetails->save($orderDetail)) {
+            $result = static::SUCCESS_MESSAGE;
+        }
+        $this->set(['result' => $result, '_serialize' => ['result']]);
+    }
+
+    public function sendPaymentRequest($orderId)
+    {
+        $result = static::FAILURE_MESSAGE;
+        $order = $this->Orders->get($orderId);
+        $order['status'] = static::PAYMENT_REQUEST_ORDER;
+        if ($this->Orders->save($order)) {
+            $result = static::SUCCESS_MESSAGE;
+        }
+        $this->set(['result' => $result, '_serialize' => ['result']]);
+    }
+
+    public function notifyProcessingComplete($orderDetailId)
+    {
+        $result = static::FAILURE_MESSAGE;
+        $orderDetail = $this->OrderDetails->get($orderDetailId);
+        $orderDetail['status'] = static::SERVED_ITEM;
+        if ($this->OrderDetails->save($orderDetail)) {
+            $result = static::SUCCESS_MESSAGE;
+        }
+        $this->set(['result' => $result, '_serialize' => ['result']]);
+    }
+
+    public function loadProcessingOrderDetails()
+    {
+        $orderDetails = $this->OrderDetails->find('all', [
+            'fields' => ['id', 'quantity', 'status', 'amount', 'item_id'],
+            'conditions' => ['status' => static::PROCESSING_ITEM],
+        ])->toArray();
+        foreach ($orderDetails as $key => $orderDetail) {
+            $menuItem = $this->MenuItems->get($orderDetail['item_id']);
+            $orderDetails[$key]['item_price'] = $menuItem['price'];
+            $orderDetails[$key]['item_name'] = $menuItem['name'];
+        }
+        $this->set(['orderDetails' => $orderDetails, '_serialize' => ['orderDetails']]);
+    }
 }
